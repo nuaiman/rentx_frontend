@@ -78,12 +78,13 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         style: kIsWeb
             ? Theme.of(
                 context,
-              ).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold)
+              ).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)
             : Theme.of(
                 context,
-              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+              ).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+        maxLines: 1,
       ),
-      subtitle: Text(widget.post.address),
+      subtitle: Text(widget.post.address, maxLines: 1),
       trailing: CupertinoButton.filled(
         color: const Color(0xFF8eda53),
         padding: const EdgeInsets.symmetric(
@@ -92,7 +93,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         ),
         borderRadius: BorderRadius.circular(8),
         onPressed: () {},
-        child: const Text('Rental'),
+        child: const Text('Book Now'),
       ),
     );
   }
