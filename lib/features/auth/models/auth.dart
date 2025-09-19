@@ -6,6 +6,7 @@ class Auth {
   final String? phone;
   final String? image;
   final String? token;
+  final String? refreshToken;
   final String? role;
 
   Auth({
@@ -16,6 +17,7 @@ class Auth {
     this.phone,
     this.image,
     this.token,
+    this.refreshToken,
     this.role,
   });
 
@@ -27,6 +29,7 @@ class Auth {
     phone: json['phone'],
     image: json['image'],
     token: json['token'],
+    refreshToken: json['refreshToken'],
     role: json['role'],
   );
 
@@ -38,6 +41,12 @@ class Auth {
     'phone': phone,
     'image': image,
     'token': token,
+    'refreshToken': refreshToken,
     'role': role,
   };
+
+  @override
+  String toString() {
+    return 'Auth(message: $message, id: $id, name: $name, email: $email, phone: $phone, image: $image, token: $token, refreshToken: $refreshToken, role: $role)';
+  }
 }

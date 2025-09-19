@@ -102,11 +102,7 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                       //
                       ListTile(
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AddPostScreen(),
-                            ),
-                          );
+                          ref.read(authProvider.notifier).logout();
                         },
                         leading: Icon(CupertinoIcons.power),
                         title: Text('Logout'),

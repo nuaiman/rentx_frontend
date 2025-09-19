@@ -6,23 +6,19 @@ import '../../../core/constants/base_url.dart';
 import '../models/auth.dart';
 
 class AuthApi {
-  // static Future<Auth> signup(
-  //   String phone,
-  //   String email,
-  //   String password,
-  // ) async {
-  //   final res = await http.post(
-  //     Uri.parse('$baseUrl/signup'),
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: jsonEncode({'phone': phone, 'email': email, 'password': password}),
-  //   );
+  static Future<Auth> refreshToken(String refreshToken) async {
+    final res = await http.post(
+      Uri.parse('$baseUrl/refresh-token'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'refreshToken': refreshToken}),
+    );
 
-  //   if (res.statusCode == 201) {
-  //     return Auth.fromJson(jsonDecode(res.body));
-  //   } else {
-  //     throw Exception('Signup failed: ${res.body}');
-  //   }
-  // }
+    if (res.statusCode == 200) {
+      return Auth.fromJson(jsonDecode(res.body));
+    } else {
+      throw Exception('Refresh token failed: ${res.body}');
+    }
+  }
 
   static Future<Auth> authByEmail(String email, String password) async {
     final res = await http.post(
@@ -35,6 +31,34 @@ class AuthApi {
       return Auth.fromJson(jsonDecode(res.body));
     } else {
       throw Exception('Login failed: ${res.body}');
+    }
+  }
+
+  static Future<Auth> authByPhone(String phone) async {
+    final res = await http.post(
+      Uri.parse('$baseUrl/auth-phone'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'phone': phone}),
+    );
+
+    if (res.statusCode == 200) {
+      return Auth.fromJson(jsonDecode(res.body));
+    } else {
+      throw Exception('Login failed: ${res.body}');
+    }
+  }
+
+  static Future<Auth> authOAuthEmailOnly(String email) async {
+    final res = await http.post(
+      Uri.parse('$baseUrl/auth-oauth'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email}),
+    );
+
+    if (res.statusCode == 200) {
+      return Auth.fromJson(jsonDecode(res.body));
+    } else {
+      throw Exception('OAuth login failed: ${res.body}');
     }
   }
 }

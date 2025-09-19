@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  simple_secure_storage_windows
   url_launcher_windows
+  webcrypto
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

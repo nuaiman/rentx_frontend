@@ -27,7 +27,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  SizedBox(height: kIsWeb ? 24 : 16),
+                  // Safe box
+                  SizedBox(height: kIsWeb ? 0 : 48),
                   _buildHeader(context),
                   const SizedBox(height: 32),
                   LayoutBuilder(
