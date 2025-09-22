@@ -54,6 +54,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     try {
       final googleSignIn = GoogleSignIn.instance;
       final account = await googleSignIn.authenticate();
+      print(account);
       final email = account.email;
       await authNotifier.authWithOAuthEmail(context, email);
     } catch (e) {
