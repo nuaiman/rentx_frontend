@@ -145,7 +145,6 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset(Pngs.logo, height: 40),
-
                       CompositedTransformTarget(
                         link: layerLink,
                         child: GestureDetector(
