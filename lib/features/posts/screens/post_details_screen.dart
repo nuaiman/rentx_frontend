@@ -19,13 +19,15 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Align(
+        alignment: AlignmentGeometry.topCenter,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1400),
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // Safe box
                   SizedBox(height: kIsWeb ? 0 : 48),

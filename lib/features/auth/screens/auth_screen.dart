@@ -234,22 +234,22 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
                 Row(
                   children: [
-                    // _socialButton(
-                    //   icon: authMethod == AuthMethod.phone
-                    //       ? Icons.email
-                    //       : Icons.phone,
-                    //   onPressed: () {
-                    //     if (authMethod == AuthMethod.phone) {
-                    //       setState(() {
-                    //         authMethod = AuthMethod.email;
-                    //       });
-                    //     } else {
-                    //       setState(() {
-                    //         authMethod = AuthMethod.phone;
-                    //       });
-                    //     }
-                    //   },
-                    // ),
+                    _socialButton(
+                      icon: authMethod == AuthMethod.phone
+                          ? Icons.email
+                          : Icons.phone,
+                      onPressed: () {
+                        if (authMethod == AuthMethod.phone) {
+                          setState(() {
+                            authMethod = AuthMethod.email;
+                          });
+                        } else {
+                          setState(() {
+                            authMethod = AuthMethod.phone;
+                          });
+                        }
+                      },
+                    ),
                     _socialButton(
                       icon: Icons.g_mobiledata,
                       onPressed: _googleAuth,

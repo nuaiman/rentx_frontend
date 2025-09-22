@@ -127,16 +127,16 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
     }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1600),
+      body: Align(
+        alignment: AlignmentGeometry.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1600),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Safe box
                 SizedBox(height: kIsWeb ? 0 : 48),
-
                 // Top bar
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
