@@ -25,11 +25,10 @@ class PostsScreen extends ConsumerStatefulWidget {
 }
 
 class _PostsScreenState extends ConsumerState<PostsScreen> {
-  late TextEditingController _searchController;
+  final _searchController = TextEditingController();
 
   @override
   void initState() {
-    _searchController = TextEditingController();
     super.initState();
   }
 
