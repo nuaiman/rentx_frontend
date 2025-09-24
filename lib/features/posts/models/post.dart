@@ -20,6 +20,9 @@ class Post {
   final List<File?> imageFiles;
   final List<Uint8List?> imageBytes;
 
+  // Nullable status
+  final String? status;
+
   Post({
     required this.id,
     required this.userId,
@@ -33,6 +36,7 @@ class Post {
     required this.imageUrls,
     required this.imageFiles,
     required this.imageBytes,
+    this.status,
   });
 
   Post copyWith({
@@ -48,6 +52,7 @@ class Post {
     List<String>? imageUrls,
     List<File?>? imageFiles,
     List<Uint8List?>? imageBytes,
+    String? status,
   }) {
     return Post(
       id: id ?? this.id,
@@ -62,6 +67,7 @@ class Post {
       imageUrls: imageUrls ?? this.imageUrls,
       imageFiles: imageFiles ?? this.imageFiles,
       imageBytes: imageBytes ?? this.imageBytes,
+      status: status ?? this.status,
     );
   }
 
@@ -76,6 +82,7 @@ class Post {
     'weeklyPrice': weeklyPrice,
     'monthlyPrice': monthlyPrice,
     'imageUrls': imageUrls,
+    'status': status,
   };
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -97,11 +104,12 @@ class Post {
       imageUrls: urls,
       imageFiles: List.filled(urls.length, null),
       imageBytes: List.filled(urls.length, null),
+      status: json['status'] as String?,
     );
   }
 
   @override
   String toString() {
-    return 'Post(id: $id, name: $name, images: $imageUrls)';
+    return 'Post(id: $id, name: $name, status: $status, images: $imageUrls)';
   }
 }

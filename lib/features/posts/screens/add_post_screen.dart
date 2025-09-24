@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../auth/notifiers/auth_notifier.dart';
 import '../../categories/notifiers/category_notifier.dart';
+import '../../init/screens/init_screen.dart';
 import '../models/post.dart';
 import '../notifiers/post_notifier.dart';
 
@@ -84,7 +85,10 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Post created successfully!')),
         );
-        Navigator.pop(context);
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => InitScreen()),
+          (route) => false,
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(

@@ -37,12 +37,19 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     builder: (context, constraints) {
                       final isWide = constraints.maxWidth > 900;
                       return isWide
-                          ? Row(
+                          ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(flex: 3, child: _buildImages()),
-                                const SizedBox(width: 32),
-                                Expanded(flex: 2, child: _buildDetails()),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(flex: 3, child: _buildImages()),
+                                    const SizedBox(width: 32),
+                                    Expanded(flex: 2, child: _buildDetails()),
+                                  ],
+                                ),
+                                const SizedBox(height: 24),
+                                _buildDescription(),
                               ],
                             )
                           : Column(
@@ -51,6 +58,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                 _buildImages(),
                                 const SizedBox(height: 24),
                                 _buildDetails(),
+                                const SizedBox(height: 24),
+                                _buildDescription(),
                               ],
                             );
                     },
@@ -164,13 +173,32 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _buildSectionTitle('Host'),
+        _buildHostTile(),
+        const SizedBox(height: 32),
+        _buildSectionTitle('Pricing'),
+        _buildPricing(),
+        const SizedBox(height: 32),
+        _buildCaution(),
+      ],
+    );
+  }
+
+  Widget _buildDescription() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         _buildSectionTitle('Description'),
         Padding(
           padding: const EdgeInsets.only(bottom: 24),
-          child: Text(widget.post.description),
+          child: Align(
+            alignment: AlignmentGeometry.centerLeft,
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 800),
+              child: Text(widget.post.description),
+            ),
+          ),
         ),
-        _buildSectionTitle('Pricing'),
-        _buildPricing(),
       ],
     );
   }
@@ -221,6 +249,90 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
               ),
             );
           }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHostTile() {
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 500),
+      child: Card(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Avatar
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: Colors.blueGrey.shade100,
+                child: const Icon(
+                  Icons.person,
+                  size: 32,
+                  color: Colors.blueGrey,
+                ),
+              ),
+              const SizedBox(width: 12),
+
+              // Name + Role
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Host Name',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      'Host',
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Actions
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.call),
+                tooltip: 'Call Host',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCaution() {
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 500),
+      child: Card(
+        color: Colors.green.shade50, // light warning background
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.greenAccent.shade200, width: 1.5),
+        ),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.green.shade100,
+            child: Icon(
+              Icons.warning_amber_rounded, // proper caution icon
+              color: Colors.amber.shade800,
+            ),
+          ),
+          title: const Text(
+            'Never share your banking card details or OTP with anyone. Always verify the product before making any payment. Delivery services are not guaranteed by third parties. Stay alert and cautious at all times.',
+          ),
         ),
       ),
     );
