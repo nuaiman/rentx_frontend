@@ -2,13 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../categories/models/category.dart';
 import '../models/post.dart';
 import 'category_notifier.dart';
-import 'post_notifier.dart';
+import 'approved_post_notifier.dart';
 import 'search_notifier.dart';
 
 class FilteredPostsNotifier extends Notifier<List<Post>> {
   @override
   List<Post> build() {
-    final allItems = ref.watch(postsProvider);
+    final allItems = ref.watch(approvedPostsProvider);
     final selectedCategory = ref.watch(categoryProvider);
     final searchQuery = ref.watch(searchProvider);
 

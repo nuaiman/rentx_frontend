@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/post.dart';
-import '../notifiers/post_notifier.dart';
+import '../notifiers/approved_post_notifier.dart';
 
 class UpdatePostScreen extends ConsumerStatefulWidget {
   final Post post;
@@ -92,7 +92,7 @@ class _UpdatePostScreenState extends ConsumerState<UpdatePostScreen> {
       imageBytes: imageBytes,
     );
 
-    await ref.read(postsProvider.notifier).updatePost(updatedPost);
+    await ref.read(approvedPostsProvider.notifier).updatePost(updatedPost);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

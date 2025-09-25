@@ -3,15 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/pngs.dart';
+import '../../../main.dart';
 import '../../auth/notifiers/auth_notifier.dart';
-import '../../auth/screens/admin_home_screen.dart';
 import '../../auth/screens/auth_screen.dart';
 import '../../categories/notifiers/category_notifier.dart';
+import '../../init/screens/admin_init_screen.dart';
 import '../notifiers/category_notifier.dart';
 import '../notifiers/filtered_post_notifier.dart';
-import '../notifiers/post_notifier.dart';
+import '../notifiers/approved_post_notifier.dart';
 import '../notifiers/search_notifier.dart';
 import '../widgets/category_button.dart';
 import 'add_post_screen.dart';
@@ -40,7 +42,7 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(postsProvider);
+    ref.watch(approvedPostsProvider);
     final categories = ref.watch(categoriesProvider);
     final filteredPosts = ref.watch(filteredItemsProvider);
     final auth = ref.watch(authProvider);
@@ -73,7 +75,8 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => AdminHomeScreen(),
+                                    // builder: (context) => AdminHomeScreen(),
+                                    builder: (context) => AdminInitScreen(),
                                   ),
                                 );
                               },
@@ -347,10 +350,10 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                                   ),
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PostDetailsScreen(post: post),
+                                      context.push(
+                                        RouteNames.postDetails.replaceFirst(
+                                          ':id',
+                                          '${post.id}',
                                         ),
                                       );
                                     },

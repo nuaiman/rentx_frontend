@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../posts/screens/posts_screen.dart';
-import '../notifiers/init_notifier.dart';
+import '../notifiers/user_init_notifier.dart';
 
-class InitScreen extends ConsumerWidget {
-  const InitScreen({super.key});
+class UserInitScreen extends ConsumerWidget {
+  const UserInitScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final initState = ref.watch(initProvider);
+    final initState = ref.watch(userInitProvider);
 
     return initState.when(
       data: (_) {
@@ -29,7 +29,7 @@ class InitScreen extends ConsumerWidget {
               ElevatedButton(
                 onPressed: () {
                   // retry
-                  ref.invalidate(initProvider);
+                  ref.invalidate(userInitProvider);
                 },
                 child: const Text('Retry'),
               ),

@@ -3,20 +3,27 @@ import '../../auth/notifiers/auth_notifier.dart';
 import '../api/post_api.dart';
 import '../models/post.dart';
 
-class PostsNotifier extends Notifier<List<Post>> {
+class ApprovedPostsNotifier extends Notifier<List<Post>> {
   @override
   List<Post> build() {
-    fetchPosts();
+    // Default: load public posts
+    fetchApprovedPosts();
     return [];
   }
 
-  Future<void> fetchPosts() async {
+  // ──────────────────────────────
+  // Normal user functions
+  // ──────────────────────────────
+
+  /// Fetch public posts
+  Future<void> fetchApprovedPosts() async {
     try {
-      final posts = await PostApi.getPosts();
+      final posts = await PostApi.getApprovedPosts();
       state = posts;
     } catch (_) {}
   }
 
+  /// Create a new post (normal user)
   Future<Post> createPost(Post post) async {
     final token = ref.read(authProvider).value?.token;
     if (token == null) throw Exception("No token");
@@ -41,17 +48,20 @@ class PostsNotifier extends Notifier<List<Post>> {
 
     final updatedPost = await PostApi.updatePost(postToUpdate, token);
 
-    state = [...state, updatedPost];
+    // Only add to state if approved
+    if (updatedPost.status == 'approved') {
+      state = [...state, updatedPost];
+    }
 
     return updatedPost;
   }
 
+  /// Update an existing post (normal user)
   Future<void> updatePost(Post post) async {
     final token = ref.read(authProvider).value?.token;
     if (token == null) return;
 
     try {
-      // Upload new images if any
       final uploadedUrls = await PostApi.uploadPostImages(
         postId: post.id,
         imageFiles: post.imageFiles,
@@ -78,6 +88,7 @@ class PostsNotifier extends Notifier<List<Post>> {
     }
   }
 
+  /// Delete a post
   Future<void> deletePost(int id) async {
     final token = ref.read(authProvider).value?.token;
     if (token == null) return;
@@ -87,8 +98,37 @@ class PostsNotifier extends Notifier<List<Post>> {
       state = state.where((p) => p.id != id).toList();
     } catch (_) {}
   }
+
+  /// Get a single approved post by ID
+  Future<Post?> getPostById(int id) async {
+    try {
+      // First, check if the post is already in state
+      Post? existingPost;
+      try {
+        existingPost = state.firstWhere((p) => p.id == id);
+      } catch (_) {
+        existingPost = null;
+      }
+      if (existingPost != null) return existingPost;
+      // If not, fetch from API
+      final post = await PostApi.getPostById(id);
+      // Only add to state if approved
+      if (post.status == 'approved') {
+        state = [...state, post];
+      }
+      return post;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Add a new post to approved list (called after approval)
+  void addApprovedPost(Post post) {
+    state = [...state, post];
+  }
 }
 
-final postsProvider = NotifierProvider<PostsNotifier, List<Post>>(
-  PostsNotifier.new,
-);
+final approvedPostsProvider =
+    NotifierProvider<ApprovedPostsNotifier, List<Post>>(
+      ApprovedPostsNotifier.new,
+    );

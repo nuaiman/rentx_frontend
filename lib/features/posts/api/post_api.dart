@@ -63,8 +63,8 @@ class PostApi {
     throw Exception('Failed to create post');
   }
 
-  static Future<List<Post>> getPosts() async {
-    final res = await http.get(Uri.parse('$baseUrl/posts'));
+  static Future<List<Post>> getApprovedPosts() async {
+    final res = await http.get(Uri.parse('$baseUrl/approved-posts'));
     if (res.statusCode == 200) {
       final data = jsonDecode(res.body) as List;
       return data.map((e) => Post.fromJson(e)).toList();
@@ -92,4 +92,65 @@ class PostApi {
     if (res.statusCode == 200) return Post.fromJson(jsonDecode(res.body));
     throw Exception('Failed to update post');
   }
+
+  /// Get a single post by ID (public)
+  static Future<Post> getPostById(int id) async {
+    final res = await http.get(Uri.parse('$baseUrl/posts/$id'));
+    if (res.statusCode == 200) {
+      return Post.fromJson(jsonDecode(res.body));
+    }
+    throw Exception('Failed to fetch post');
+  }
+
+  /// Get all pending posts (admin only)
+  static Future<List<Post>> getPendingPosts(String token) async {
+    final res = await http.get(
+      Uri.parse('$baseUrl/posts/pending'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body) as List;
+      return data.map((e) => Post.fromJson(e)).toList();
+    }
+    throw Exception('Failed to fetch pending posts');
+  }
+
+  /// Approve or Reject a post (admin only)
+  static Future<void> updatePostStatus({
+    required int postId,
+    required String status, // 'approved' or 'rejected'
+    required String token,
+  }) async {
+    final res = await http.put(
+      Uri.parse('$baseUrl/posts/$postId/status'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({'status': status}),
+    );
+
+    if (res.statusCode != 200) {
+      // surface backend message if any
+      try {
+        final body = jsonDecode(res.body);
+        throw Exception(body['message'] ?? 'Failed to update status');
+      } catch (_) {
+        throw Exception('Failed to update status');
+      }
+    }
+  }
+
+  /// Get all posts (admin only)
+  // static Future<List<Post>> getAllPosts(String token) async {
+  //   final res = await http.get(
+  //     Uri.parse('$baseUrl/posts/all'),
+  //     headers: {'Authorization': 'Bearer $token'},
+  //   );
+  //   if (res.statusCode == 200) {
+  //     final data = jsonDecode(res.body) as List;
+  //     return data.map((e) => Post.fromJson(e)).toList();
+  //   }
+  //   throw Exception('Failed to fetch all posts');
+  // }
 }

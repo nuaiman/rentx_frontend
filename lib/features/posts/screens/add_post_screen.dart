@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../auth/notifiers/auth_notifier.dart';
 import '../../categories/notifiers/category_notifier.dart';
-import '../../init/screens/init_screen.dart';
+import '../../init/screens/user_init_screen.dart';
 import '../models/post.dart';
-import '../notifiers/post_notifier.dart';
+import '../notifiers/approved_post_notifier.dart';
 
 class AddPostScreen extends ConsumerStatefulWidget {
   const AddPostScreen({super.key});
@@ -80,13 +80,13 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
     );
 
     try {
-      await ref.read(postsProvider.notifier).createPost(post);
+      await ref.read(approvedPostsProvider.notifier).createPost(post);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Post created successfully!')),
         );
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => InitScreen()),
+          MaterialPageRoute(builder: (context) => UserInitScreen()),
           (route) => false,
         );
       }

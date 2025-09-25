@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../categories/notifiers/category_notifier.dart';
+import '../notifiers/category_notifier.dart';
 
-class AdminHomeScreen extends ConsumerWidget {
-  const AdminHomeScreen({super.key});
+class CategoriesScreen extends ConsumerWidget {
+  const CategoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider);
 
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
         title: const Text(
           'Categories',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
         ),
         centerTitle: true,
       ),
@@ -25,28 +32,29 @@ class AdminHomeScreen extends ConsumerWidget {
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
             )
-          : ListView.separated(
-              padding: const EdgeInsets.all(12),
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
               itemCount: categories.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final cat = categories[index];
                 return Card(
                   elevation: 2,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(20),
                   ),
+                  margin: const EdgeInsets.only(bottom: 12),
                   child: Theme(
                     data: Theme.of(
                       context,
                     ).copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
                       tilePadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+                        horizontal: 20,
+                        vertical: 12,
                       ),
                       childrenPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
+                        horizontal: 20,
+                        vertical: 8,
                       ),
                       title: Text(
                         cat.name,
@@ -55,15 +63,26 @@ class AdminHomeScreen extends ConsumerWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      leading: const Icon(
-                        Icons.folder,
-                        color: Colors.blueAccent,
+                      leading: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.folder,
+                          color: Colors.blueAccent,
+                          size: 28,
+                        ),
                       ),
                       children: [
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.edit, color: Colors.grey),
-                          title: const Text('Edit Category'),
+                          leading: const Icon(Icons.edit, color: Colors.orange),
+                          title: const Text(
+                            'Edit Category',
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
                           onTap: () async {
                             final newName = await _showInputDialog(
                               context,
@@ -79,8 +98,14 @@ class AdminHomeScreen extends ConsumerWidget {
                         ),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.delete, color: Colors.grey),
-                          title: const Text('Delete Category'),
+                          leading: const Icon(Icons.delete, color: Colors.red),
+                          title: const Text(
+                            'Delete Category',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                            ),
+                          ),
                           onTap: () async {
                             final confirm = await _showConfirmDialog(
                               context,
@@ -108,14 +133,19 @@ class AdminHomeScreen extends ConsumerWidget {
                 .createCategory(name, ref);
           }
         },
-        label: const Text('Add New Category'),
+        backgroundColor: Colors.blueAccent,
+        elevation: 4,
         icon: const Icon(Icons.add),
-        tooltip: 'Add a new category',
+        label: const Text(
+          'Add Category',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
 
-  /// Input dialog with rounded corners
+  // ────────────── Dialogs ──────────────
+
   static Future<String?> _showInputDialog(
     BuildContext context, {
     required String title,
@@ -126,7 +156,7 @@ class AdminHomeScreen extends ConsumerWidget {
       context: context,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(title),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(hintText: 'Enter name'),
@@ -146,7 +176,6 @@ class AdminHomeScreen extends ConsumerWidget {
     );
   }
 
-  /// Confirmation dialog with rounded corners
   static Future<bool> _showConfirmDialog(
     BuildContext context,
     String message,
@@ -162,6 +191,7 @@ class AdminHomeScreen extends ConsumerWidget {
             child: const Text('No'),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
             onPressed: () => Navigator.pop(context, true),
             child: const Text('Yes'),
           ),
