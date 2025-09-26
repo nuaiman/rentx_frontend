@@ -44,6 +44,7 @@ class ApprovedPostsNotifier extends Notifier<List<Post>> {
       imageUrls: uploadedUrls,
       imageFiles: [],
       imageBytes: [],
+      // void func upload the id and set it as path for the media. For example /storage/posts/1/images
     );
 
     final updatedPost = await PostApi.updatePost(postToUpdate, token);

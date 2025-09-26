@@ -17,7 +17,6 @@ import '../notifiers/approved_post_notifier.dart';
 import '../notifiers/search_notifier.dart';
 import '../widgets/category_button.dart';
 import 'add_post_screen.dart';
-import 'post_details_screen.dart';
 
 class PostsScreen extends ConsumerStatefulWidget {
   const PostsScreen({super.key});
