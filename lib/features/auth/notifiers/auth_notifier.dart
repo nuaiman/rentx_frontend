@@ -54,25 +54,6 @@ class AuthNotifier extends AsyncNotifier<Auth?> {
     }
   }
 
-  Future<void> authWithOAuthEmail(BuildContext context, String email) async {
-    state = const AsyncValue.loading();
-    try {
-      final res = await AuthApi.authOAuthEmailOnly(email);
-      if (res.refreshToken != null) {
-        await TokenStorage.saveRefreshToken(res.refreshToken!);
-      }
-      state = AsyncValue.data(res);
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const PostsScreen()));
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Login failed: $e')));
-    }
-  }
-
   Future<void> authEmail(
     BuildContext context,
     String email,
@@ -80,7 +61,36 @@ class AuthNotifier extends AsyncNotifier<Auth?> {
   ) async {
     state = const AsyncValue.loading();
     try {
+      print('Calling AuthApi.authByEmail...');
+      print('Email: $email');
       final res = await AuthApi.authByEmail(email, password);
+      print('Got response: $res');
+
+      if (res.refreshToken != null) {
+        print('Saving refresh token...');
+        await TokenStorage.saveRefreshToken(res.refreshToken!);
+        print('Refresh token saved.');
+      }
+
+      state = AsyncValue.data(res);
+      print('State updated, navigating...');
+
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const PostsScreen()));
+    } catch (e, st) {
+      print('Caught error: $e\n$st');
+      state = AsyncValue.error(e, st);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login failed: $e')));
+    }
+  }
+
+  Future<void> authWithOAuthEmail(BuildContext context, String email) async {
+    state = const AsyncValue.loading();
+    try {
+      final res = await AuthApi.authOAuthEmailOnly(email);
       if (res.refreshToken != null) {
         await TokenStorage.saveRefreshToken(res.refreshToken!);
       }

@@ -152,8 +152,11 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                         child: GestureDetector(
                           onTap: () {
                             if (auth.value == null) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => AuthScreen()),
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AuthScreen();
+                                },
                               );
                             } else {
                               if (overlayEntry == null) {
