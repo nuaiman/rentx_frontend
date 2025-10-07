@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../../core/constants/pngs.dart';
+import 'package:google_sign_in_web/web_only.dart';
 import '../notifiers/auth_notifier.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
@@ -12,54 +13,32 @@ class AuthScreen extends ConsumerStatefulWidget {
 }
 
 class _AuthScreenState extends ConsumerState<AuthScreen> {
+  late final GoogleSignIn signIn;
+
+  final googleSignInWebClientId =
+      '1057406041251-rvug878aolk7vicrtun457t307ctgeo0.apps.googleusercontent.com';
+
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) {
+      signIn = GoogleSignIn.instance;
+      signIn.initialize(clientId: googleSignInWebClientId);
+    }
+  }
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  // void _submit() async {
-  //   final email = _emailController.text.trim();
-  //   final password = _passwordController.text.trim();
-  //   print(email);
-  //   final authNotifier = ref.read(authProvider.notifier);
-  //   await authNotifier.authEmail(context, email, password);
-  // }
-
+  // Email + password login
   void _submit() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-
     final authNotifier = ref.read(authProvider.notifier);
-
     await authNotifier.authEmail(context, email, password);
   }
 
-  // void _googleAuth() async {
-  //   final authNotifier = ref.read(authProvider.notifier);
-  //   try {
-  //     final googleSignIn = GoogleSignIn.instance;
-  //     final account = await googleSignIn.authenticate();
-  //     final email = account.email;
-  //     await authNotifier.authWithOAuthEmail(context, email);
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(
-  //       context,
-  //     ).showSnackBar(SnackBar(content: Text("Google login failed: $e")));
-  //   }
-  // }
-
-  void _googleAuth() async {
-    final authNotifier = ref.read(authProvider.notifier);
-    try {
-      final googleSignIn = GoogleSignIn.instance;
-      final account = await googleSignIn.authenticate();
-      final email = account.email;
-      await authNotifier.authWithOAuthEmail(context, email);
-    } catch (e) {
-      print(e);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Google login failed: $e")));
-    }
-  }
+  //
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +67,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize: 36,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),
@@ -100,26 +78,17 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               Text(
                 "We’ve missed you! Please sign in to catch up on what you’ve missed",
                 style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
-                textAlign: TextAlign.start,
               ),
               const SizedBox(height: 24),
 
-              // Google button
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: const BorderSide(color: Colors.black12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+              // Google button (works for mobile; web requires FedCM or SDK button)
+              renderButton(
+                configuration: GSIButtonConfiguration(
+                  locale: 'en',
+                  minimumWidth: 600,
                 ),
-                icon: Image.asset(Pngs.google, height: 20),
-                label: const Text(
-                  "Log in with Google",
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-                onPressed: _googleAuth,
               ),
+
               const SizedBox(height: 24),
 
               // Divider
