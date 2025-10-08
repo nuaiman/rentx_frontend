@@ -53,6 +53,13 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
 
   // Submit form
   Future<void> _submit(int userId) async {
+    if (_selectedCategoryId == null) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a category for your post')),
+      );
+    }
+
     if (!_formKey.currentState!.validate() || _selectedCategoryId == null) {
       return;
     }

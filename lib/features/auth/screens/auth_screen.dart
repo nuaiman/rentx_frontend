@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in_all_platforms/google_sign_in_all_platforms.dart';
 import '../notifiers/auth_notifier.dart';
+import '../utils/google_signin_service.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -12,20 +13,13 @@ class AuthScreen extends ConsumerStatefulWidget {
 }
 
 class _AuthScreenState extends ConsumerState<AuthScreen> {
-  late final GoogleSignIn googleSignIn;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void initState() {
+    googleSignIn.silentSignIn();
     super.initState();
-    googleSignIn = GoogleSignIn(
-      params: const GoogleSignInParams(
-        clientId:
-            '1057406041251-rvug878aolk7vicrtun457t307ctgeo0.apps.googleusercontent.com',
-        scopes: ['openid', 'profile', 'email'],
-      ),
-    );
   }
 
   @override
