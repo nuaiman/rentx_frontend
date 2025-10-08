@@ -10,6 +10,7 @@ import '../../../core/constants/pngs.dart';
 import '../../../main.dart';
 import '../../auth/notifiers/auth_notifier.dart';
 import '../../auth/screens/auth_screen.dart';
+import '../../auth/screens/profile_screen.dart';
 import '../../categories/notifiers/category_notifier.dart';
 import '../../init/screens/admin_init_screen.dart';
 import '../notifiers/category_notifier.dart';
@@ -96,7 +97,22 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                           );
                         },
                         leading: Icon(CupertinoIcons.add),
-                        title: Text('My Listings'),
+                        title: Text('Add Listing'),
+                        dense: true,
+                        visualDensity: VisualDensity.compact,
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                      //
+                      ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProfileScreen(),
+                            ),
+                          );
+                        },
+                        leading: Icon(CupertinoIcons.person),
+                        title: Text('Profile'),
                         dense: true,
                         visualDensity: VisualDensity.compact,
                         contentPadding: EdgeInsets.zero,
