@@ -48,11 +48,14 @@ class AuthApi {
     }
   }
 
-  static Future<Auth> authOAuthEmailOnly(String email) async {
+  static Future<Auth> googleAuth({
+    required String idToken,
+    required String accessToken,
+  }) async {
     final res = await http.post(
-      Uri.parse('$baseUrl/auth-oauth'),
+      Uri.parse('$baseUrl/auth-google'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email}),
+      body: jsonEncode({'idToken': idToken, 'accessToken': accessToken}),
     );
 
     if (res.statusCode == 200) {

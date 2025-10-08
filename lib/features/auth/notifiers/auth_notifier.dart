@@ -87,13 +87,27 @@ class AuthNotifier extends AsyncNotifier<Auth?> {
     }
   }
 
-  Future<void> authWithOAuthEmail(BuildContext context, String email) async {
+  Future<void> googleAuthToBackend(
+    BuildContext context, {
+    required String idToken,
+    required String accessToken,
+  }) async {
     state = const AsyncValue.loading();
     try {
-      final res = await AuthApi.authOAuthEmailOnly(email);
+      final res = await AuthApi.googleAuth(
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
       if (res.refreshToken != null) {
+        print('---------------------');
+        print('---------------------');
+        print('---------------------');
+        print('---------------------');
+
         await TokenStorage.saveRefreshToken(res.refreshToken!);
       }
+
       state = AsyncValue.data(res);
       Navigator.of(
         context,
