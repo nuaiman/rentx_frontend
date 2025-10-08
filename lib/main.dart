@@ -28,6 +28,9 @@ class MyApp extends ConsumerWidget {
           backgroundColor: Color(0xFFffffff),
           surfaceTintColor: Color(0xFFffffff),
         ),
+        scrollbarTheme: ScrollbarThemeData(
+          thickness: WidgetStateProperty.all(0),
+        ),
       ),
       // home: AuthScreen(),
       // home: HomeScreen(),

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/features/posts/models/post.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/pngs.dart';
@@ -346,70 +347,7 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                               itemCount: categoryPosts.length,
                               itemBuilder: (context, i) {
                                 final post = categoryPosts[i];
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      context.push(
-                                        RouteNames.postDetails.replaceFirst(
-                                          ':id',
-                                          '${post.id}',
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      width: 300,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              child: Image.network(
-                                                post.imageUrls[0],
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
-                                              ),
-                                            ),
-                                          ),
-                                          ListTile(
-                                            contentPadding:
-                                                const EdgeInsets.symmetric(
-                                                  horizontal: 8,
-                                                ),
-                                            title: Text(
-                                              post.name,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            subtitle: Text(
-                                              post.address,
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            trailing: Text(
-                                              "৳ ${post.dailyPrice.toStringAsFixed(2)} /Daily",
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
+                                return PostTile(post: post);
                               },
                             ),
                           ),
@@ -417,6 +355,67 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                       ],
                     );
                   },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PostTile extends StatelessWidget {
+  const PostTile({super.key, required this.post});
+
+  final Post post;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: GestureDetector(
+          onTap: () {
+            context.push(
+              RouteNames.postDetails.replaceFirst(':id', '${post.id}'),
+            );
+          },
+          child: Container(
+            width: 300,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.network(
+                      post.imageUrls[0],
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  title: Text(
+                    post.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: Text(
+                    post.address,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  trailing: Text(
+                    "৳ ${post.dailyPrice.toStringAsFixed(2)} /Daily",
+                    style: const TextStyle(fontSize: 12),
+                  ),
                 ),
               ],
             ),

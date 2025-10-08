@@ -100,11 +100,6 @@ class AuthNotifier extends AsyncNotifier<Auth?> {
       );
 
       if (res.refreshToken != null) {
-        print('---------------------');
-        print('---------------------');
-        print('---------------------');
-        print('---------------------');
-
         await TokenStorage.saveRefreshToken(res.refreshToken!);
       }
 

@@ -122,25 +122,25 @@ class _PostDetailsScreenState extends ConsumerState<PostDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                post!.name,
-                style: kIsWeb
-                    ? Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      )
-                    : Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 2),
-              Text(
-                post!.address,
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              // Text(
+              //   post!.name,
+              //   style: kIsWeb
+              //       ? Theme.of(context).textTheme.headlineMedium!.copyWith(
+              //           fontWeight: FontWeight.bold,
+              //         )
+              //       : Theme.of(context).textTheme.headlineSmall!.copyWith(
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //   maxLines: 1,
+              //   overflow: TextOverflow.ellipsis,
+              // ),
+              // const SizedBox(height: 2),
+              // Text(
+              //   post!.address,
+              //   style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+              //   maxLines: 1,
+              //   overflow: TextOverflow.ellipsis,
+              // ),
             ],
           ),
         ),
@@ -217,10 +217,12 @@ class _PostDetailsScreenState extends ConsumerState<PostDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle('Host & Pricing'),
-        _buildHostTile(),
-        SizedBox(height: 18),
+        //  _buildSectionTitle('Host & Pricing'),
+        _buildSectionTitle(post!.name),
+        _buildSectionTitle(post!.address),
         _buildPricing(),
+        SizedBox(height: 18),
+        _buildHostTile(),
         SizedBox(height: 18),
         _buildCaution(),
       ],
